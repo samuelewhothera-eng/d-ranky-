@@ -368,7 +368,6 @@ footer{background:#080806;padding:4rem 3rem 2rem;border-top:1px solid rgba(201,1
   <button class="mobile-close" onclick="toggleMenu()">✕</button>
   <a href="#collection" onclick="toggleMenu()">Collection</a>
   <a href="#story" onclick="toggleMenu()">Our Story</a>
-  <a href="#upload" onclick="toggleMenu()">Upload</a>
   <a href="#contact" onclick="toggleMenu()">Contact</a>
 </div>
 
@@ -395,7 +394,6 @@ footer{background:#080806;padding:4rem 3rem 2rem;border-top:1px solid rgba(201,1
   <ul class="nav-links">
     <li><a href="#collection">Collection</a></li>
     <li><a href="#story">Our Story</a></li>
-    <li><a href="#upload">Upload</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="nav-right">
@@ -476,16 +474,6 @@ footer{background:#080806;padding:4rem 3rem 2rem;border-top:1px solid rgba(201,1
   </div>
 </section>
 
-<!-- ── UPLOAD SECTION ── -->
-<div class="upload-section" id="upload">
-  <div class="upload-inner reveal">
-    <span class="section-label">Brand Gallery</span>
-    <h2 class="section-title" style="font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:300;color:var(--white);margin-bottom:.5rem;">Upload Your <em style="font-style:italic;color:var(--gold);">Pieces</em></h2>
-    <p style="font-size:.82rem;color:var(--muted);letter-spacing:.08em;margin-bottom:.5rem;">Click or tap any slot below to upload a photo of your clothing.</p>
-    <div class="upload-grid" id="uploadGrid"></div>
-    <button onclick="addUploadSlot()" style="margin-top:1.5rem;background:transparent;border:1px solid rgba(201,168,76,.3);color:var(--gold);font-family:var(--sans);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;padding:.7rem 1.8rem;cursor:pointer;transition:background .3s,color .3s;" onmouseover="this.style.background='var(--gold)';this.style.color='var(--black)';" onmouseout="this.style.background='transparent';this.style.color='var(--gold)';">+ Add More Slots</button>
-  </div>
-</div>
 
 <!-- ── STATS ── -->
 <div class="stats-full">
@@ -577,7 +565,7 @@ footer{background:#080806;padding:4rem 3rem 2rem;border-top:1px solid rgba(201,1
       <ul class="footer-links">
         <li><a href="#collection">Collection</a></li>
         <li><a href="#story">Our Story</a></li>
-        <li><a href="#upload">Gallery</a></li>
+        <li><a href="#story">Our Story</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
@@ -623,13 +611,11 @@ let allProducts = [];   // raw products from API
 let currentUser = null;
 let authToken = null;
 let pageImages = {};    // { productId: dataUrl } — local only (upload slots)
-let uploadSlotCount = 6;
 
 // ── INIT
 (async function init() {
   loadAuthFromStorage();
   updateNavAuth();
-  buildUploadGrid();
   setupReveal();
   setupNavScroll();
   checkPaymentReturn();
@@ -1065,49 +1051,6 @@ function setupReveal() {
     });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
-}
-
-// ────────────────────────────────────────────────
-// UPLOAD SLOTS (local only, gallery display)
-// ────────────────────────────────────────────────
-
-function buildUploadGrid() {
-  const grid = document.getElementById('uploadGrid');
-  grid.innerHTML = '';
-  for (let i = 0; i < uploadSlotCount; i++) grid.appendChild(createSlot(i));
-}
-
-function createSlot(i) {
-  const slot = document.createElement('div');
-  slot.className = 'upload-slot';
-  slot.id = 'slot-' + i;
-  slot.innerHTML = `
-    <span class="upload-icon">+</span>
-    <span class="upload-label">Upload Photo</span>
-    <input type="file" accept="image/*" onchange="previewUpload(event,${i})"/>
-    <div class="upload-overlay"><span>Change Photo</span></div>`;
-  return slot;
-}
-
-function previewUpload(e, i) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const slot = document.getElementById('slot-' + i);
-    slot.querySelector('.upload-icon').style.display = 'none';
-    slot.querySelector('.upload-label').style.display = 'none';
-    let img = slot.querySelector('.upload-preview');
-    if (!img) { img = document.createElement('img'); img.className = 'upload-preview'; slot.appendChild(img); }
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-function addUploadSlot() {
-  const grid = document.getElementById('uploadGrid');
-  grid.appendChild(createSlot(uploadSlotCount));
-  uploadSlotCount++;
 }
 
 // ────────────────────────────────────────────────
