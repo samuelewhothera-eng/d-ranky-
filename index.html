@@ -614,7 +614,7 @@ footer{background:#080806;padding:4rem 3rem 2rem;border-top:1px solid rgba(201,1
 // ────────────────────────────────────────────────
 // CONFIG — update this to your deployed backend URL
 // ────────────────────────────────────────────────
-const API = 'https://your-backend-url.com/api';
+const API = 'https://d-ranky.onrender.com/api';
 // When testing locally change to: const API = 'http://localhost:5000/api';
 
 // ── STATE
@@ -623,6 +623,7 @@ let allProducts = [];   // raw products from API
 let currentUser = null;
 let authToken = null;
 let pageImages = {};    // { productId: dataUrl } — local only (upload slots)
+let uploadSlotCount = 6;
 
 // ── INIT
 (async function init() {
@@ -1069,7 +1070,6 @@ function setupReveal() {
 // ────────────────────────────────────────────────
 // UPLOAD SLOTS (local only, gallery display)
 // ────────────────────────────────────────────────
-let uploadSlotCount = 6;
 
 function buildUploadGrid() {
   const grid = document.getElementById('uploadGrid');
